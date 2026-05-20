@@ -132,5 +132,147 @@ namespace SEAA.Astrodex.Data.Repositories
             await _context.HistorialConsultas.AddAsync(historial);
             await _context.SaveChangesAsync();
         }
+
+        // Trae una página de cuerpos desde BD usando JOIN con la intermedia
+        // Retorna null si la página no fue cargada antes
+        public async Task<List<CuerpoCeleste>?> ObtenerPaginaCargadaAsync(
+            string tipo, int pagina, int tamanio)
+        {
+            var paginaRegistrada = await _context.PaginasCargadas
+                .FirstOrDefaultAsync(p =>
+                    p.TipoCuerpo.ToLower() == tipo.ToLower() &&
+                    p.NumeroPagina == pagina &&
+                    p.TamanioPagina == tamanio);
+
+            if (paginaRegistrada == null)
+                return null;
+
+            return await _context.PaginasCargadasCuerpos
+                .Where(pcc => pcc.PaginaCargadaId == paginaRegistrada.Id)
+                .Join(_context.CuerposCelestes,
+                    pcc => pcc.CuerpoCelesteId,
+                    cc => cc.Id,
+                    (pcc, cc) => cc)
+                .OrderBy(cc => cc.NombreIngles)
+                .ToListAsync();
+        }
+
+        // Trae una página directamente desde la API
+        public async Task<List<CuerpoCeleste>> BuscarPaginaEnApiAsync(
+            string tipo, int pagina, int tamanio)
+        {
+            var dtos = await _apiService.GetCuerposPorFiltroAsync(
+                "bodyType", "eq", tipo,
+                orden: "englishName,asc",
+                pagina: pagina,
+                tamanio: tamanio);
+
+            return dtos.Select(CuerpoCelesteMapper.ToEntity).ToList();
+        }
+
+        // Registra una página cargada y sus cuerpos en la tabla intermedia
+        public async Task RegistrarPaginaCargadaAsync(
+            string tipo, int pagina, int tamanio, List<CuerpoCeleste> cuerpos)
+        {
+            var registro = new PaginaCargada
+            {
+                TipoCuerpo = tipo,
+                NumeroPagina = pagina,
+                TamanioPagina = tamanio,
+                FechaCarga = DateTime.Now
+            };
+
+            await _context.PaginasCargadas.AddAsync(registro);
+            await _context.SaveChangesAsync();
+
+            // Crea registros en la tabla intermedia
+            var registros = cuerpos.Select(c => new PaginaCargadaCuerpo
+            {
+                PaginaCargadaId = registro.Id,
+                CuerpoCelesteId = c.Id
+            }).ToList();
+
+            await _context.PaginasCargadasCuerpos.AddRangeAsync(registros);
+            await _context.SaveChangesAsync();
+        }
+
+        // Guarda en lote sin duplicar y valida que los padres existan
+        // Si un cuerpo tiene PlanetaPadreId pero el padre no existe en BD,
+        // se guarda con PlanetaPadreId = null para no violar la FK
+        public async Task GuardarLoteEnBaseDatosAsync(List<CuerpoCeleste> cuerpos)
+        {
+            if (!cuerpos.Any())
+                return;
+
+            var idsEntrada = cuerpos.Select(c => c.Id).ToList();
+
+            var idsExistentes = await _context.CuerposCelestes
+                .Where(c => idsEntrada.Contains(c.Id))
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            var nuevos = cuerpos
+                .Where(c => !idsExistentes.Contains(c.Id))
+                .ToList();
+
+            if (!nuevos.Any())
+                return;
+
+            // Recolecta todos los PlanetaPadreId no nulos
+            var idsPadres = nuevos
+                .Where(c => !string.IsNullOrEmpty(c.PlanetaPadreId))
+                .Select(c => c.PlanetaPadreId!)
+                .Distinct()
+                .ToList();
+
+            // Verifica cuáles padres existen en BD (incluye los del mismo lote)
+            var padresExistentesEnBd = await _context.CuerposCelestes
+                .Where(c => idsPadres.Contains(c.Id))
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            var idsLote = nuevos.Select(c => c.Id).ToHashSet();
+            var padresValidos = new HashSet<string>(padresExistentesEnBd);
+            padresValidos.UnionWith(idsLote);
+
+            // Limpia PlanetaPadreId si el padre no existe
+            foreach (var c in nuevos)
+            {
+                if (!string.IsNullOrEmpty(c.PlanetaPadreId) &&
+                    !padresValidos.Contains(c.PlanetaPadreId))
+                {
+                    c.PlanetaPadreId = null;
+                }
+
+                c.FechaCarga = DateTime.Now;
+            }
+
+            await _context.CuerposCelestes.AddRangeAsync(nuevos);
+            await _context.SaveChangesAsync();
+        }
+
+        // Operación 3: trae todos los satélites de un planeta directamente de la API
+        // para garantizar datos completos. Guarda los nuevos en BD y memoria.
+        public async Task<List<CuerpoCeleste>> BuscarPorPlanetaPadreAsync(
+            string idPlaneta)
+        {
+            // Siempre va a la API para garantizar datos completos
+            var dtos = await _apiService.GetCuerposPorFiltroAsync(
+                "aroundPlanet", "eq", idPlaneta);
+
+            if (!dtos.Any())
+                return new List<CuerpoCeleste>();
+
+            var entidades = dtos.Select(CuerpoCelesteMapper.ToEntity).ToList();
+
+            // Guarda en BD los que aún no existen
+            await GuardarLoteEnBaseDatosAsync(entidades);
+
+            // Carga en memoria los que aún no están
+            foreach (var c in entidades)
+                _memoria.Agregar(c);
+
+            return entidades;
+        }
     }
 }
