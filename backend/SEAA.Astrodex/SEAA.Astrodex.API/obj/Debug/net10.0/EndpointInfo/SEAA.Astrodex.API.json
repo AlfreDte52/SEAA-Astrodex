@@ -109,6 +109,78 @@
         }
       }
     },
+    "/api/CuerposCelestes/historial": {
+      "get": {
+        "tags": [
+          "CuerposCelestes"
+        ],
+        "parameters": [
+          {
+            "name": "pagina",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "tamanio",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CuerposCelestes/relaciones": {
+      "get": {
+        "tags": [
+          "CuerposCelestes"
+        ],
+        "parameters": [
+          {
+            "name": "tipo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "TODOS"
+            }
+          },
+          {
+            "name": "pagina",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "tamanio",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Relaciones/{origen}/{destino}/{tipo}": {
       "get": {
         "tags": [
@@ -146,6 +218,36 @@
           }
         }
       }
+    },
+    "/api/Rutas/{origen}/{destino}": {
+      "get": {
+        "tags": [
+          "Rutas"
+        ],
+        "parameters": [
+          {
+            "name": "origen",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "destino",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": { },
@@ -155,6 +257,9 @@
     },
     {
       "name": "Relaciones"
+    },
+    {
+      "name": "Rutas"
     }
   ]
 }

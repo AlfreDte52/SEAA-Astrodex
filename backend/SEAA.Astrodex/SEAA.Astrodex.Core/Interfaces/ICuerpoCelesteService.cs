@@ -14,5 +14,8 @@ namespace SEAA.Astrodex.Core.Interfaces
         //Task<List<CuerpoCelesteResponseDto>?> BuscarPorTipoAsync(string tipo, int pagina, int tamanio);
         Task<(List<CuerpoCelesteResponseDto>? cuerpos, string fuente)>BuscarPorTipoConFuenteAsync(string tipo, int pagina, int tamanio);
         Task<SistemaPlanetarioDto?> ObtenerSistemaPlanetarioAsync(string idPlaneta);
+        Task<List<HistorialResponseDto>> ObtenerHistorialAsync(int pagina, int tamanio);
+        Task<List<RelacionHistorialDto>> ObtenerRelacionesAsync(
+            string tipo, int pagina, int tamanio);
     }
 }

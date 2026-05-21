@@ -10,7 +10,6 @@ namespace SEAA.Astrodex.Data.Context
             : base(options) { }
 
         public DbSet<CuerpoCeleste> CuerposCelestes { get; set; }
-        public DbSet<LunaRef> LunasRef { get; set; }
         public DbSet<RelacionCeleste> RelacionesCelestes { get; set; }
         public DbSet<HistorialConsulta> HistorialConsultas { get; set; }
         public DbSet<PaginaCargada> PaginasCargadas { get; set; }

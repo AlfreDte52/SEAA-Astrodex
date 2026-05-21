@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "Jvy09VkEisI=",
+  "dgSpecHash": "t9VkKslqH/0=",
   "success": true,
   "projectFilePath": "C:\\Users\\jjjjp\\source\\repos\\SEAA-Astrodex\\backend\\SEAA.Astrodex\\SEAA.Astrodex.Infrastructure\\SEAA.Astrodex.Infrastructure.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\jjjjp\\.nuget\\packages\\quikgraph\\2.5.0\\quikgraph.2.5.0.nupkg.sha512"
+  ],
   "logs": []
 }

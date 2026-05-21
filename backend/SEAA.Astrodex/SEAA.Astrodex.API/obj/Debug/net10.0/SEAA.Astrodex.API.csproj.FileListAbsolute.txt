@@ -789,3 +789,4 @@ C:\Users\jjjjp\source\repos\SEAA-Astrodex\backend\SEAA.Astrodex\SEAA.Astrodex.AP
 C:\Users\jjjjp\source\repos\SEAA-Astrodex\backend\SEAA.Astrodex\SEAA.Astrodex.API\obj\Debug\net10.0\SEAA.Astrodex.API.pdb
 C:\Users\jjjjp\source\repos\SEAA-Astrodex\backend\SEAA.Astrodex\SEAA.Astrodex.API\obj\Debug\net10.0\SEAA.Astrodex.API.genruntimeconfig.cache
 C:\Users\jjjjp\source\repos\SEAA-Astrodex\backend\SEAA.Astrodex\SEAA.Astrodex.API\obj\Debug\net10.0\ref\SEAA.Astrodex.API.dll
+C:\Users\jjjjp\source\repos\SEAA-Astrodex\backend\SEAA.Astrodex\SEAA.Astrodex.API\bin\Debug\net10.0\QuikGraph.dll

@@ -4,6 +4,7 @@ using SEAA.Astrodex.Data.Context;
 using SEAA.Astrodex.Data.Repositories;
 using SEAA.Astrodex.Infrastructure.External;
 using SEAA.Astrodex.Infrastructure.Formatters;
+using SEAA.Astrodex.Infrastructure.Graphs;
 using SEAA.Astrodex.Infrastructure.Services;
 using SEAA.Astrodex.Infrastructure.Strategies;
 using SEAA.Astrodex.Infrastructure.Structures;
@@ -62,6 +63,12 @@ builder.Services.AddScoped<IEstrategiaRelacion, EstrategiaFamiliar>();
 
 // Servicio de relaciones
 builder.Services.AddScoped<IRelacionService, RelacionService>();
+
+// Operación 7 - rutas planetarias
+builder.Services.AddScoped<EstrategiaDistancia>();
+builder.Services.AddScoped<GrafoPlanetario>();
+builder.Services.AddScoped<IRutaService, RutaService>();
+builder.Services.AddScoped<EstrategiaDistancia>();
 
 var app = builder.Build();
 

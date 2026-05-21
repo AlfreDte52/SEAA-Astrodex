@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "7NhQ/8RKHdg=",
+  "dgSpecHash": "3cO9N7LX+qY=",
   "success": true,
   "projectFilePath": "C:\\Users\\jjjjp\\source\\repos\\SEAA-Astrodex\\backend\\SEAA.Astrodex\\SEAA.Astrodex.Data\\SEAA.Astrodex.Data.csproj",
   "expectedPackageFiles": [
@@ -14,7 +14,8 @@
     "C:\\Users\\jjjjp\\.nuget\\packages\\microsoft.extensions.logging\\10.0.7\\microsoft.extensions.logging.10.0.7.nupkg.sha512",
     "C:\\Users\\jjjjp\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.7\\microsoft.extensions.logging.abstractions.10.0.7.nupkg.sha512",
     "C:\\Users\\jjjjp\\.nuget\\packages\\microsoft.extensions.options\\10.0.7\\microsoft.extensions.options.10.0.7.nupkg.sha512",
-    "C:\\Users\\jjjjp\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.7\\microsoft.extensions.primitives.10.0.7.nupkg.sha512"
+    "C:\\Users\\jjjjp\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.7\\microsoft.extensions.primitives.10.0.7.nupkg.sha512",
+    "C:\\Users\\jjjjp\\.nuget\\packages\\quikgraph\\2.5.0\\quikgraph.2.5.0.nupkg.sha512"
   ],
   "logs": []
 }

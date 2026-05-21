@@ -53,9 +53,6 @@ namespace SEAA.Astrodex.Core.Entities
         public ICollection<CuerpoCeleste> Lunas { get; set; }
             = new List<CuerpoCeleste>();
 
-        public ICollection<LunaRef> LunasRef { get; set; }
-            = new List<LunaRef>();
-
         public ICollection<RelacionCeleste> RelacionesOrigen { get; set; }
             = new List<RelacionCeleste>();
 

@@ -29,5 +29,13 @@ namespace SEAA.Astrodex.Core.Interfaces
             string tipo, int pagina, int tamanio);
         Task RegistrarPaginaCargadaAsync(
             string tipo, int pagina, int tamanio, List<CuerpoCeleste> cuerpos);
+        // Trae todos los planetas principales del Sol (sin padre)
+        Task<List<CuerpoCeleste>> ObtenerPlanetasPrincipalesAsync();
+        // Operación 8: historial general paginado
+        Task<List<HistorialConsulta>> ObtenerHistorialAsync(int pagina, int tamanio);
+
+        // Relaciones paginadas, filtradas por tipo (TODOS trae todas)
+        Task<List<RelacionCeleste>> ObtenerRelacionesAsync(
+            string tipo, int pagina, int tamanio);
     }
 }

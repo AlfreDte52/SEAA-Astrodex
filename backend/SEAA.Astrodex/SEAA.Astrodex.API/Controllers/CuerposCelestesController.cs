@@ -121,5 +121,69 @@ namespace SEAA.Astrodex.API.Controllers
                 return StatusCode(500, $"Error interno: {ex.Message}");
             }
         }
+
+        // Operación 8: obtiene el historial general de consultas paginado
+        [HttpGet("historial")]
+        public async Task<IActionResult> ObtenerHistorial(
+            [FromQuery] int pagina = 1,
+            [FromQuery] int tamanio = 20)
+        {
+            if (pagina < 1 || tamanio < 1)
+                return BadRequest("pagina y tamanio deben ser mayores a 0");
+
+            try
+            {
+                var historial = await _service.ObtenerHistorialAsync(pagina, tamanio);
+
+                if (!historial.Any())
+                    return NotFound("No hay registros en el historial");
+
+                return Ok(new
+                {
+                    pagina,
+                    tamanio,
+                    cantidad = historial.Count,
+                    historial
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno: {ex.Message}");
+            }
+        }
+
+        // Obtiene las relaciones calculadas, filtradas por tipo y paginadas
+        [HttpGet("relaciones")]
+        public async Task<IActionResult> ObtenerRelaciones(
+            [FromQuery] string tipo = "TODOS",
+            [FromQuery] int pagina = 1,
+            [FromQuery] int tamanio = 20)
+        {
+            if (pagina < 1 || tamanio < 1)
+                return BadRequest("pagina y tamanio deben ser mayores a 0");
+
+            try
+            {
+                var relaciones = await _service.ObtenerRelacionesAsync(
+                    tipo, pagina, tamanio);
+
+                if (!relaciones.Any())
+                    return NotFound(
+                        $"No hay relaciones registradas para el tipo: {tipo}");
+
+                return Ok(new
+                {
+                    tipo,
+                    pagina,
+                    tamanio,
+                    cantidad = relaciones.Count,
+                    relaciones
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno: {ex.Message}");
+            }
+        }
     }
 }
