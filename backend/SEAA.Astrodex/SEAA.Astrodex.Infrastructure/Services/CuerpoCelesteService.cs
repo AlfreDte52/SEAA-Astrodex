@@ -173,5 +173,40 @@ namespace SEAA.Astrodex.Infrastructure.Services
                     .ToList()
             };
         }
+
+        // Operación 8: trae el historial general paginado
+        public async Task<List<HistorialResponseDto>> ObtenerHistorialAsync(
+            int pagina, int tamanio)
+        {
+            var historial = await _repository.ObtenerHistorialAsync(pagina, tamanio);
+
+            return historial.Select(h => new HistorialResponseDto
+            {
+                Id = h.Id,
+                TipoConsulta = h.TipoConsulta,
+                FechaConsulta = h.FechaConsulta,
+                CuerpoCelesteId = h.CuerpoCelesteId
+            }).ToList();
+        }
+
+        // Trae las relaciones calculadas, filtradas por tipo y paginadas
+        public async Task<List<RelacionHistorialDto>> ObtenerRelacionesAsync(
+            string tipo, int pagina, int tamanio)
+        {
+            var relaciones = await _repository.ObtenerRelacionesAsync(
+                tipo, pagina, tamanio);
+
+            return relaciones.Select(r => new RelacionHistorialDto
+            {
+                Id = r.Id,
+                TipoRelacion = r.TipoRelacion,
+                ValorCalculado = r.ValorCalculado,
+                UnidadMedida = r.UnidadMedida,
+                Descripcion = r.Descripcion,
+                FechaConsulta = r.FechaConsulta,
+                CuerpoOrigenId = r.CuerpoOrigenId,
+                CuerpoDestinoId = r.CuerpoDestinoId
+            }).ToList();
+        }
     }
 }

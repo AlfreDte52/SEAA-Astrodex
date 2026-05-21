@@ -126,6 +126,14 @@
           }
         }
       },
+      "QuikGraph/2.5.0": {
+        "runtime": {
+          "lib/netstandard2.0/QuikGraph.dll": {
+            "assemblyVersion": "2.5.0.0",
+            "fileVersion": "2.5.0.0"
+          }
+        }
+      },
       "SEAA.Astrodex.Core/1.0.0": {
         "runtime": {
           "SEAA.Astrodex.Core.dll": {
@@ -136,6 +144,7 @@
       },
       "SEAA.Astrodex.Infrastructure/1.0.0": {
         "dependencies": {
+          "QuikGraph": "2.5.0",
           "SEAA.Astrodex.Core": "1.0.0"
         },
         "runtime": {
@@ -222,6 +231,13 @@
       "sha512": "sha512-D5M0Jr551iTgwkZMN9rm0pSkgNLj5quUWQUmQPMZh7k/bnvZTnXRGfE2KuvXf1EEjt/ofD9yw9IumpgdP9QCnw==",
       "path": "microsoft.extensions.primitives/10.0.7",
       "hashPath": "microsoft.extensions.primitives.10.0.7.nupkg.sha512"
+    },
+    "QuikGraph/2.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sG+mrPpXwxlXknRK5VqWUGiOmDACa9X+3ftlkQIMgOZUqxVOQSe0+HIU9PTjwqazy0pqSf8MPDXYFGl0GYWcKw==",
+      "path": "quikgraph/2.5.0",
+      "hashPath": "quikgraph.2.5.0.nupkg.sha512"
     },
     "SEAA.Astrodex.Core/1.0.0": {
       "type": "project",

@@ -2,6 +2,19 @@
   "version": 4,
   "targets": {
     "net10.0": {
+      "QuikGraph/2.5.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/QuikGraph.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/QuikGraph.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "SEAA.Astrodex.Core/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
@@ -15,6 +28,29 @@
     }
   },
   "libraries": {
+    "QuikGraph/2.5.0": {
+      "sha512": "sG+mrPpXwxlXknRK5VqWUGiOmDACa9X+3ftlkQIMgOZUqxVOQSe0+HIU9PTjwqazy0pqSf8MPDXYFGl0GYWcKw==",
+      "type": "package",
+      "path": "quikgraph/2.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "lib/net35/QuikGraph.dll",
+        "lib/net35/QuikGraph.xml",
+        "lib/net40/QuikGraph.dll",
+        "lib/net40/QuikGraph.xml",
+        "lib/net45/QuikGraph.dll",
+        "lib/net45/QuikGraph.xml",
+        "lib/netstandard1.3/QuikGraph.dll",
+        "lib/netstandard1.3/QuikGraph.xml",
+        "lib/netstandard2.0/QuikGraph.dll",
+        "lib/netstandard2.0/QuikGraph.xml",
+        "quikgraph.2.5.0.nupkg.sha512",
+        "quikgraph.nuspec",
+        "quikgraph_logo.png"
+      ]
+    },
     "SEAA.Astrodex.Core/1.0.0": {
       "type": "project",
       "path": "../SEAA.Astrodex.Core/SEAA.Astrodex.Core.csproj",
@@ -23,6 +59,7 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "QuikGraph >= 2.5.0",
       "SEAA.Astrodex.Core >= 1.0.0"
     ]
   },
@@ -82,6 +119,12 @@
       "net10.0": {
         "framework": "net10.0",
         "targetAlias": "net10.0",
+        "dependencies": {
+          "QuikGraph": {
+            "target": "Package",
+            "version": "[2.5.0, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",

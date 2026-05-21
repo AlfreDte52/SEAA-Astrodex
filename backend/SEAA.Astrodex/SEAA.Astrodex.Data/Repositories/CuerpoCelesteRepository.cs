@@ -274,5 +274,45 @@ namespace SEAA.Astrodex.Data.Repositories
 
             return entidades;
         }
+        // Trae los planetas principales (los que orbitan al Sol directamente)
+        public async Task<List<CuerpoCeleste>> ObtenerPlanetasPrincipalesAsync()
+        {
+            return await _context.CuerposCelestes
+                .Where(c => c.EsPlaneta == true &&
+                            c.PlanetaPadreId == null)
+                .OrderBy(c => c.SemimajorAxis)
+                .ToListAsync();
+        }
+
+        // Trae el historial general ordenado del más reciente al más antiguo
+        public async Task<List<HistorialConsulta>> ObtenerHistorialAsync(
+            int pagina, int tamanio)
+        {
+            return await _context.HistorialConsultas
+                .OrderByDescending(h => h.FechaConsulta)
+                .Skip((pagina - 1) * tamanio)
+                .Take(tamanio)
+                .ToListAsync();
+        }
+
+        // Trae las relaciones paginadas, filtra por tipo si no es TODOS
+        public async Task<List<RelacionCeleste>> ObtenerRelacionesAsync(
+            string tipo, int pagina, int tamanio)
+        {
+            var query = _context.RelacionesCelestes.AsQueryable();
+
+            // Si el tipo no es TODOS, filtra por ese tipo específico
+            if (!tipo.Equals("TODOS", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(r =>
+                    r.TipoRelacion.ToLower() == tipo.ToLower());
+            }
+
+            return await query
+                .OrderByDescending(r => r.FechaConsulta)
+                .Skip((pagina - 1) * tamanio)
+                .Take(tamanio)
+                .ToListAsync();
+        }
     }
 }

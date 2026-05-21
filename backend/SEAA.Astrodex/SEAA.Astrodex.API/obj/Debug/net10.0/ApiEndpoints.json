@@ -49,6 +49,53 @@
   },
   {
     "ContainingType": "SEAA.Astrodex.API.Controllers.CuerposCelestesController",
+    "Method": "ObtenerHistorial",
+    "RelativePath": "api/CuerposCelestes/historial",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pagina",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "tamanio",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SEAA.Astrodex.API.Controllers.CuerposCelestesController",
+    "Method": "ObtenerRelaciones",
+    "RelativePath": "api/CuerposCelestes/relaciones",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tipo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "pagina",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "tamanio",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SEAA.Astrodex.API.Controllers.CuerposCelestesController",
     "Method": "BuscarPorTipo",
     "RelativePath": "api/CuerposCelestes/tipo/{tipo}",
     "HttpMethod": "GET",
@@ -93,6 +140,27 @@
       },
       {
         "Name": "tipo",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SEAA.Astrodex.API.Controllers.RutasController",
+    "Method": "CalcularRuta",
+    "RelativePath": "api/Rutas/{origen}/{destino}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "origen",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "destino",
         "Type": "System.String",
         "IsRequired": true
       }
