@@ -1,7 +1,50 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
 
-<PageTitle>Home</PageTitle>
+<div class="hero-container">
 
-<h1>Hello, world!</h1>
+    <!-- Three.js -->
+    <div id="space-scene"></div>
 
-Welcome to your new app.
+    <!-- Overlay UI -->
+    <div class="hero-overlay">
+
+        <img src="images/AstrodexPersonaje.png"
+             class="astrobot"
+             alt="AstroBot" />
+
+        <h1>SEAA</h1>
+
+        <p>
+            Sistema de Exploración y Análisis Astronómico
+        </p>
+
+        <div class="hero-buttons">
+
+            <button class="btn-space">
+                Explorar
+            </button>
+
+            <button class="btn-space">
+                Relaciones
+            </button>
+
+            <button class="btn-space">
+                Rutas
+            </button>
+
+        </div>
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("initSpaceScene");
+        }
+    }
+}
