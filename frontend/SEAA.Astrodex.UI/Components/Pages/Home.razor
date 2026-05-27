@@ -1,6 +1,8 @@
 ﻿@page "/"
+@using SEAA.Astrodex.UI.Components.Shared
 @rendermode InteractiveServer
 @inject IJSRuntime JS
+
 
 <div class="hero-container">
 
@@ -14,25 +16,26 @@
              class="astrobot"
              alt="AstroBot" />
 
-        <h1>SEAA</h1>
+        <h1 class="hero-title">
+            SEAA · Astrodex
+        </h1>
 
-        <p>
+        <p class="hero-subtitle">
             Sistema de Exploración y Análisis Astronómico
         </p>
 
         <div class="hero-buttons">
-
-            <button class="btn-space">
+            <NavLink href="/explorador" class="btn-space">
                 Explorar
-            </button>
+            </NavLink>
 
-            <button class="btn-space">
+            <NavLink href="/relaciones" class="btn-space">
                 Relaciones
-            </button>
+            </NavLink>
 
-            <button class="btn-space">
+            <NavLink href="/rutas" class="btn-space">
                 Rutas
-            </button>
+            </NavLink>
 
         </div>
     </div>

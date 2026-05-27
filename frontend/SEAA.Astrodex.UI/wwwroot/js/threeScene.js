@@ -43,10 +43,17 @@ window.initSpaceScene = () => {
         64
     );
 
-    const material = new THREE.MeshStandardMaterial({
-        color: 0x3b82f6,
-        roughness: 0.8,
-        metalness: 0.1
+    const material = new THREE.MeshPhysicalMaterial({
+        color: 0x4f8dfd,
+
+        roughness: 0.65,
+        metalness: 0.08,
+
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.5,
+
+        emissive: 0x0f172a,
+        emissiveIntensity: 0.08
     });
 
     const planet = new THREE.Mesh(
@@ -55,6 +62,31 @@ window.initSpaceScene = () => {
     );
 
     scene.add(planet);
+
+    // Glow del planeta
+
+    /*
+    const glowGeometry = new THREE.SphereGeometry(
+        2.25,
+        64,
+        64
+    );
+
+    const glowMaterial = new THREE.MeshBasicMaterial({
+        color: 0x60a5fa,
+        transparent: true,
+        opacity: 0.18
+    });
+
+    const glow = new THREE.Mesh(
+        glowGeometry,
+        glowMaterial
+    );
+
+    scene.add(glow);
+
+    */
+
 
     // Luz principal
     const light = new THREE.PointLight(
@@ -78,40 +110,69 @@ window.initSpaceScene = () => {
 
     scene.add(ambient);
 
-    // Estrellas
-    const starGeometry = new THREE.BufferGeometry();
-    const starCount = 3000;
+    // ===== ESTRELLAS MULTICAPA =====
 
-    const positions = [];
+    function createStars(count, size, distance) {
 
-    for (let i = 0; i < starCount; i++) {
+        const geometry =
+            new THREE.BufferGeometry();
 
-        positions.push(
-            (Math.random() - 0.5) * 1000,
-            (Math.random() - 0.5) * 1000,
-            (Math.random() - 0.5) * 1000
+        const positions = [];
+
+        for (let i = 0; i < count; i++) {
+
+            positions.push(
+                (Math.random() - 0.5) * distance,
+                (Math.random() - 0.5) * distance,
+                (Math.random() - 0.5) * distance
+            );
+        }
+
+        geometry.setAttribute(
+            'position',
+            new THREE.Float32BufferAttribute(
+                positions,
+                3
+            )
+        );
+
+        const material =
+            new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: size,
+                sizeAttenuation: true
+            });
+
+        return new THREE.Points(
+            geometry,
+            material
         );
     }
 
-    starGeometry.setAttribute(
-        'position',
-        new THREE.Float32BufferAttribute(
-            positions,
-            3
-        )
-    );
+    const starsFar =
+        createStars(
+            2500,
+            0.35,
+            1200
+        );
 
-    const starMaterial = new THREE.PointsMaterial({
-        color: 0xffffff,
-        size: 1
-    });
+    const starsMid =
+        createStars(
+            1800,
+            0.6,
+            900
+        );
 
-    const stars = new THREE.Points(
-        starGeometry,
-        starMaterial
-    );
+    const starsNear =
+        createStars(
+            900,
+            1,
+            700
+        );
 
-    scene.add(stars);
+    scene.add(starsFar);
+    scene.add(starsMid);
+    scene.add(starsNear);
 
     camera.position.z = 8;
 
@@ -139,8 +200,13 @@ window.initSpaceScene = () => {
         requestAnimationFrame(animate);
 
         planet.rotation.y += 0.003;
+       
 
-        stars.rotation.y += 0.0005;
+        starsFar.rotation.y += 0.00015;
+
+        starsMid.rotation.y += 0.0004;
+
+        starsNear.rotation.y += 0.0008;
 
         renderer.render(
             scene,

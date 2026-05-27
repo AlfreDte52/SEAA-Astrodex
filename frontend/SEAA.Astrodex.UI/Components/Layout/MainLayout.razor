@@ -1,5 +1,10 @@
-﻿@inherits LayoutComponentBase
+﻿@using SEAA.Astrodex.UI.Components.Shared
+@inherits LayoutComponentBase
+
+<SpaceNavbar />
 
 <div class="main-layout">
-    @Body
+    <div class="page-transition">
+        @Body
+    </div>
 </div>

@@ -1,0 +1,76 @@
+﻿@page "/explorador"
+@rendermode InteractiveServer
+
+@using SEAA.Astrodex.UI.Models.CuerpoCeleste
+@using SEAA.Astrodex.UI.Services
+
+@inject CuerpoCelesteService CuerpoService
+
+<h1 class="hero-title">
+    Explorador Astronómico
+</h1>
+
+<p class="hero-subtitle">
+    Cuerpos celestes obtenidos desde Astrodex API
+</p>
+
+@if (cargando)
+{
+    <p>Cargando cuerpos celestes...</p>
+}
+else if (!cuerpos.Any())
+{
+    <p>No se encontraron resultados.</p>
+}
+else
+{
+    <div class="explorer-grid">
+
+        @foreach (var cuerpo in cuerpos)
+        {
+            <div class="space-card">
+
+                <h3>
+                    @cuerpo.nombre
+                </h3>
+
+                <p>
+                    Tipo:
+                    @cuerpo.tipoCuerpo
+                </p>
+
+                <p>
+                    Radio:
+                    @cuerpo.radioMedio km
+                </p>
+
+                <p>
+                    Gravedad:
+                    @cuerpo.gravedad
+                </p>
+
+            </div>
+        }
+
+    </div>
+}
+
+@code {
+
+    private List<CuerpoCelesteDto>
+        cuerpos = [];
+
+    private bool cargando = true;
+
+    protected override async Task
+        OnInitializedAsync()
+    {
+        cuerpos =
+            await CuerpoService
+                .ObtenerPorTipoAsync(
+                    "Planet"
+                );
+
+        cargando = false;
+    }
+}
