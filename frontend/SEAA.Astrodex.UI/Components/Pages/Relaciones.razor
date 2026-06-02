@@ -1,7 +1,280 @@
 ﻿@page "/relaciones"
+@rendermode InteractiveServer
 
-<h1>🌌 Relaciones</h1>
-<p>Análisis de relaciones astronómicas.</p>
+@using SEAA.Astrodex.UI.Models.CuerpoCeleste
+@using SEAA.Astrodex.UI.Models.Relaciones
+@using SEAA.Astrodex.UI.Services
+
+@inject CuerpoCelesteService CuerpoService
+
+<h1 class="hero-title">
+    Relaciones Astronómicas
+</h1>
+
+<p class="hero-subtitle">
+    Relaciones calculadas desde Astrodex API
+
+</p>
+
+<!-- PANEL NUEVO -->
+<div class="relation-panel">
+    <!-- ORIGEN -->
+    <div class="relation-group">
+
+        <label>
+            Tipo origen
+        </label>
+
+        <select @bind="tipoOrigen"
+                @bind:after="CargarOrigen">
+
+            @foreach (var tipo in tiposDisponibles)
+            {
+                <option value="@tipo">
+                    @tipo
+                </option>
+            }
+
+        </select>
+
+        <label>
+            Cuerpo origen
+        </label>
+
+        <select @bind="origen">
+
+            @foreach (var cuerpo in cuerposOrigen)
+            {
+                <option value="@cuerpo.id">
+                    @cuerpo.nombre
+                </option>
+            }
+
+        </select>
+
+    </div>
+
+    <!-- DESTINO -->
+    <div class="relation-group">
+
+        <label>
+            Tipo destino
+        </label>
+
+        <select @bind="tipoDestino"
+                @bind:after="CargarDestino">
+
+            @foreach (var tipo in tiposDisponibles)
+            {
+                <option value="@tipo">
+                    @tipo
+                </option>
+            }
+
+        </select>
+
+        <label>
+            Cuerpo destino
+        </label>
+
+        <select @bind="destino">
+
+            @foreach (var cuerpo in cuerposDestino)
+            {
+                <option value="@cuerpo.id">
+                    @cuerpo.nombre
+                </option>
+            }
+
+        </select>
+
+    </div>
+
+    <!-- RELACION -->
+    <div class="relation-group">
+
+        <label>
+            Tipo relación
+        </label>
+
+        <select @bind="tipoRelacion">
+
+            <option value="TODOS">TODOS</option>
+            <option value="ORBITAL">ORBITAL</option>
+            <option value="FISICA">FISICA</option>
+            <option value="DISTANCIA">DISTANCIA</option>
+            <option value="TEMPORAL">TEMPORAL</option>
+            <option value="FAMILIAR">FAMILIAR</option>
+
+        </select>
+
+    </div>
+
+    <!-- BOTON ABAJO -->
+    <div class="relation-action">
+
+        <button class="space-button"
+                @onclick="Analizar">
+
+            Analizar relación
+        </button>
+
+    </div>
+
+</div>
+
+<!-- AQUÍ sigue el grid -->
+@if (!relaciones.Any())
+{
+    <p>No hay relaciones registradas.</p>
+}
+else
+{
+    <div class="explorer-grid">
+
+        @foreach (var relacion in relaciones)
+        {
+            <div class="space-card">
+
+                <h3>
+                    @relacion.CuerpoOrigenId
+                    →
+                    @relacion.CuerpoDestinoId
+                </h3>
+
+                <p>
+                    Tipo:
+                    @relacion.TipoRelacion
+                </p>
+
+                <p>
+                    Valor:
+                    @relacion.ValorCalculado
+                    @relacion.UnidadMedida
+                </p>
+
+                <p>
+                    @relacion.Descripcion
+                </p>
+
+                <p>
+                   
+                        Fecha:
+                        @relacion.FechaConsulta.ToShortDateString()
+                   
+                </p>
+
+                <p>
+                    @if (relacion.ValorCalculado > 0)
+                    {
+                        <span class="relation-ok">
+                            ✓ Relación encontrada
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="relation-none">
+                            Sin relación
+                        </span>
+                    }
+                </p>
+
+            </div>
+        }
+
+    </div>
+}
+
 @code {
 
+    private List<RelacionResponseDto>
+        relaciones = new();
+
+    private List<CuerpoCelesteDto>
+    cuerposOrigen = new();
+
+    private List<CuerpoCelesteDto>
+        cuerposDestino = new();
+
+    private string tipoOrigen = "Planet";
+    private string tipoDestino = "Planet";
+    private string origen = "";
+    private string destino = "";
+    private string tipoRelacion = "TODOS";
+
+
+    private List<string>
+    tiposDisponibles =
+[
+    "Planet",
+    "Moon",
+    "Star",
+    "Asteroid",
+    "Comet"
+];
+
+  
+    protected override async Task
+    OnInitializedAsync()
+    {
+        relaciones =
+        await CuerpoService
+            .ObtenerRelacionesAsync();
+
+        await CargarOrigen();
+        await CargarDestino();
+       
+    }
+
+    private async Task
+    CargarOrigen()
+    {
+        cuerposOrigen =
+            await CuerpoService
+                .ObtenerPorTipoAsync(
+                    tipoOrigen
+                );
+
+        if (cuerposOrigen.Any())
+        {
+            origen =
+                cuerposOrigen
+                    .First().id;
+        }
+    }
+
+    private async Task
+        CargarDestino()
+    {
+        cuerposDestino =
+            await CuerpoService
+                .ObtenerPorTipoAsync(
+                    tipoDestino
+                );
+
+        if (cuerposDestino.Any())
+        {
+            destino =
+                cuerposDestino
+                    .First().id;
+        }
+    }
+
+   
+
+    private async Task Analizar()
+    {
+        await CuerpoService
+            .AnalizarRelacionAsync(
+                origen,
+                destino,
+                tipoRelacion
+            );
+
+        relaciones =
+            await CuerpoService
+                .ObtenerRelacionesAsync();
+
+        StateHasChanged();
+    }
 }

@@ -266,3 +266,228 @@ h1:focus {
 .main-layout {
     padding-top: 100px;
 }
+
+/* =========================
+   EXPLORADOR
+========================= */
+
+.explorer-filters {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: rgba(30,41,59,.55);
+    border: 1px solid rgba(96,165,250,.25);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: .25s ease;
+}
+
+    .filter-btn:hover {
+        background: rgba(59,130,246,.25);
+        border-color: rgba(96,165,250,.6);
+        transform: translateY(-2px);
+    }
+
+.explorer-grid {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(260px,1fr) );
+    gap: 22px;
+    padding: 25px;
+}
+
+.space-card {
+    background: rgba(15,23,42,.75);
+    border: 1px solid rgba(96,165,250,.15);
+    border-radius: 20px;
+    padding: 22px;
+    backdrop-filter: blur(12px);
+    transition: .3s ease;
+    box-shadow: 0 0 25px rgba(59,130,246,.08);
+}
+
+    .space-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(96,165,250,.45);
+        box-shadow: 0 0 35px rgba(59,130,246,.22);
+    }
+
+    .space-card h3 {
+        margin-bottom: 12px;
+        color: #93c5fd;
+    }
+
+    .space-card p {
+        color: #cbd5e1;
+        margin-bottom: 8px;
+    }
+
+
+/* =========================
+   Es para la seleccion de opciones en el explorador, no es un boton normal
+========================= */
+
+.filter-btn.active {
+    background: rgba(59,130,246,.35);
+    border-color: rgba(147,197,253,.8);
+    box-shadow: 0 0 20px rgba(59,130,246,.35);
+}
+
+/* =========================
+   EXPLORADOR TITULOS
+========================= */
+
+.hero-title {
+    text-align: center;
+}
+
+.hero-subtitle {
+    text-align: center;
+}
+
+.explorer-header {
+    text-align: center;
+}
+
+
+.clickable-card {
+    cursor: pointer;
+}
+
+/* =========================
+   RELACIONES
+========================= */
+
+.relation-ok {
+    color: #7CFFB2;
+    font-weight: 600;
+}
+
+.relation-none {
+    color: #ff8a8a;
+}
+
+/* =========================
+   PANEL RELACIONES
+========================= */
+
+.relation-panel {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+    .relation-panel input,
+    .relation-panel select {
+        padding: .7rem 1rem;
+        border-radius: 10px;
+        border: none;
+        background: rgba(20,20,35,.85);
+        color: white;
+        border: 1px solid rgba(255,255,255,.15);
+    }
+
+.space-button {
+    padding: .7rem 1.2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* =========================
+   DETALLE PLANETA
+========================= */
+
+.detalle-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: center;
+    padding: 40px;
+}
+
+.planet-scene {
+    width: 100%;
+    height: 500px;
+    border-radius: 24px;
+    background: rgba(15,23,42,.55);
+    border: 1px solid rgba(96,165,250,.15);
+    overflow: hidden;
+}
+
+.detalle-card {
+    background: rgba(15,23,42,.75);
+    padding: 30px;
+    border-radius: 24px;
+    border: 1px solid rgba(96,165,250,.15);
+    backdrop-filter: blur(10px);
+}
+
+    .detalle-card h2 {
+        color: #93c5fd;
+        margin-bottom: 20px;
+    }
+
+    .detalle-card p {
+        margin-bottom: 12px;
+        color: #cbd5e1;
+    }
+
+@media (max-width: 900px) {
+
+    .detalle-container {
+        grid-template-columns: 1fr;
+    }
+
+    .planet-scene {
+        height: 350px;
+    }
+}
+
+.relation-panel {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+}
+
+.relation-group {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    min-width: 220px;
+}
+
+    .relation-group label {
+        color: #8fb4ff;
+        font-size: .9rem;
+        font-weight: 600;
+    }
+
+    .relation-group select {
+        background: rgba(10,12,30,.95);
+        color: white;
+        border: 1px solid #31406f;
+        border-radius: 12px;
+        padding: .8rem 1rem;
+    }
+.relation-action {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+    .relation-action button {
+        min-width: 220px;
+    }

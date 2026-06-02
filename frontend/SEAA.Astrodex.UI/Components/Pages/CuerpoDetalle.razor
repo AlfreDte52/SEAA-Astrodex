@@ -1,0 +1,188 @@
+﻿@page "/cuerpo/{id}"
+
+@rendermode InteractiveServer
+
+@using SEAA.Astrodex.UI.Models.CuerpoCeleste
+@using SEAA.Astrodex.UI.Services
+
+@inject CuerpoCelesteService CuerpoService
+@inject IJSRuntime JS
+
+<h1 class="hero-title">
+    Detalle Astronómico
+</h1>
+
+@if (cargando)
+{
+    <p>Cargando información...</p>
+}
+else if (cuerpo is null)
+{
+    <p>No se encontró el cuerpo celeste.</p>
+}
+else
+{
+    <div class="detalle-container">
+
+        <div id="planet-detail-scene"
+             class="planet-scene">
+        </div>
+
+        <div class="detalle-card">
+
+            <h2>
+                @cuerpo.nombre
+            </h2>
+
+            <p>
+                Tipo:
+                @cuerpo.tipoCuerpo
+            </p>
+
+            <p>
+                Radio Medio:
+                @cuerpo.radioMedio km
+            </p>
+
+            <p>
+                Gravedad:
+                @cuerpo.gravedad
+            </p>
+
+            <p>
+                Temperatura:
+                @cuerpo.tempPromedio °K
+            </p>
+
+            <p>
+                Densidad:
+                @cuerpo.densidad
+            </p>
+
+            <p>
+                Velocidad de Escape:
+                @cuerpo.velocidadEscape km/h
+            </p>
+
+            <p>
+                Órbita:
+                @cuerpo.orbita días
+            </p>
+
+            <p>
+                Rotación:
+                @cuerpo.rotacion horas
+            </p>
+
+            <p>
+                Inclinación Axial:
+                @cuerpo.inclinacionAxial °
+            </p>
+
+            <p>
+                Masa:
+                @cuerpo.masaValor x10^@cuerpo.masaExponente kg
+            </p>
+
+            <p>
+                Volumen:
+                @cuerpo.volumenValor x10^@cuerpo.volumenExponente km³
+            </p>
+
+            @if (!string.IsNullOrWhiteSpace(
+                cuerpo.descubiertoPor))
+            {
+                <p>
+                    Descubierto por:
+                    @cuerpo.descubiertoPor
+                </p>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(
+             cuerpo.fechaDescubrimiento))
+            {
+                <p>
+                    Fecha de Descubrimiento:
+                    @cuerpo.fechaDescubrimiento
+                </p>
+            }
+
+        </div>
+
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public string id { get; set; }
+        = string.Empty;
+
+    private CuerpoCelesteDto?
+        cuerpo;
+
+    private bool cargando = true;
+    private bool escenaCargada = false;
+
+    protected override async Task
+        OnInitializedAsync()
+    {
+        cuerpo =
+            await CuerpoService
+                .ObtenerPorIdAsync(id);
+
+        cargando = false;
+
+    }
+
+    protected override async Task
+        OnAfterRenderAsync(
+            bool firstRender)
+    {
+        if (!escenaCargada && cuerpo is not null)
+        {
+            escenaCargada = true;
+
+            await JS.InvokeVoidAsync(
+                
+                "initPlanetScene"  ,
+                ObtenerColorPlaneta(
+                    cuerpo.tipoCuerpo 
+                ), 
+                cuerpo.gravedad,
+                cuerpo.id
+            );
+        }
+    }
+
+    private string ObtenerColorPlaneta(
+     string tipo)
+    {
+        return tipo switch
+    {
+        "Planet" => cuerpo?.id switch
+        {
+            "terre" => "earth.jpg",
+            "mars" => "mars.jpg",
+            "jupiter" => "jupiter.jpg",
+            "saturne" => "saturn.jpg",
+            "mercure" => "mercury.jpg",
+            "venus" => "venus.jpg",
+            "uranus" => "uranus.jpg",
+            "neptune" => "neptune.jpg",
+            _ => "earth.jpg"
+        },
+
+        "Moon" => "moon.jpg",
+
+        "Comet" => "sun.jpg",
+
+        "Asteroid" => "mercury.jpg",
+
+        "Star" => "sun.jpg",
+
+        _ => "earth.jpg"
+    };
+    }
+
+}

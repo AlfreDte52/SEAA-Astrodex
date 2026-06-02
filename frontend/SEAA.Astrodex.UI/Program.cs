@@ -14,7 +14,7 @@ builder.Services.AddHttpClient(
     {
         client.BaseAddress =
             new Uri(
-                "https://localhost:7065/"
+                "http://localhost:5236/"
             );
     });
 

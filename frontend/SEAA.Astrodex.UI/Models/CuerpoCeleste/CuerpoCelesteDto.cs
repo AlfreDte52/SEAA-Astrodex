@@ -19,5 +19,29 @@
         public double radioMedio { get; set; }
 
         public double tempPromedio { get; set; }
+
+        public double densidad { get; set; }
+
+        public double velocidadEscape { get; set; }
+
+        public double orbita { get; set; }
+
+        public double rotacion { get; set; }
+
+        public double inclinacionAxial { get; set; }
+
+        public double masaValor { get; set; }
+
+        public int masaExponente { get; set; }
+
+        public double volumenValor { get; set; }
+
+        public int volumenExponente { get; set; }
+
+        public string descubiertoPor { get; set; }
+            = string.Empty;
+
+        public string fechaDescubrimiento { get; set; }
+            = string.Empty;
     }
 }
