@@ -1,4 +1,156 @@
 ﻿@page "/rutas"
+@rendermode InteractiveServer
 
-<h1>🚀 Rutas Planetarias</h1>
-<p>Simulación de rutas.</p>
+@using Microsoft.AspNetCore.Components.Forms
+@using SEAA.Astrodex.UI.Models.CuerpoCeleste
+@using SEAA.Astrodex.UI.Models.Rutas
+@using SEAA.Astrodex.UI.Services
+
+@inject CuerpoCelesteService CuerpoService
+
+<PageTitle>
+    Rutas Planetarias
+</PageTitle>
+
+<div class="explorer-header">
+
+    <h1 class="hero-title">
+        Rutas Planetarias
+    </h1>
+
+    <p class="hero-subtitle">
+        Calcula rutas entre cuerpos celestes
+    </p>
+
+</div>
+
+<div class="relation-panel">
+
+    <div>
+        <label>Origen</label>
+        <select @bind="origen">
+            @foreach (var cuerpo in cuerpos)
+            {
+                <option value="@cuerpo.id">
+                    @cuerpo.nombre
+                </option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label>Destino</label>
+        <select @bind="destino">
+            @foreach (var cuerpo in cuerpos)
+            {
+                <option value="@cuerpo.id">
+                    @cuerpo.nombre
+                </option>
+            }
+        </select>
+    </div>
+
+</div>
+
+<div class="action-row">
+    <button class="space-button"
+            @onclick="CalcularRuta">
+        Calcular Ruta
+    </button>
+</div>
+
+
+@if (ruta != null)
+{
+    <div class="route-panel">
+
+        <h2>
+            Ruta Directa
+        </h2>
+
+        <div class="route-card">
+
+            <div class="planet-node">
+                @ruta.planetaOrigen
+            </div>
+
+            <div class="route-distance">
+
+                @ruta.rutaDirecta?.distancia.ToString("N0")
+                @ruta.rutaDirecta?.unidadMedida
+
+            </div>
+
+            <div class="planet-node">
+                @ruta.planetaDestino
+            </div>
+
+        </div>
+
+        <hr />
+
+        <h2>
+            Ruta por Tramos
+        </h2>
+
+        <div class="timeline">
+
+            @foreach (
+                var tramo in
+                ruta.rutaPorTramos?.tramos ?? [])
+            {
+                <div class="timeline-step">
+
+                    <div class="timeline-node">
+                        @tramo.origen
+                    </div>
+
+                    <div class="timeline-arrow">
+                        ↓
+                    </div>
+
+                    <div class="timeline-node">
+                        @tramo.destino
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+}
+
+@code {
+
+    private List<CuerpoCelesteDto> cuerpos = [];
+    private string origen = "";
+    private string destino = "";
+    private RutaPlanetariaDto? ruta;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cuerpos = await CuerpoService.ObtenerPorTipoAsync("Planet");
+
+        if (cuerpos.Any())
+        {
+            origen = cuerpos.First().id;
+            destino = cuerpos.Last().id;
+        }
+    }
+
+    private async Task CalcularRuta()
+    {
+        ruta = null;
+
+        StateHasChanged();
+
+        ruta =
+            await CuerpoService
+                .ObtenerRutaAsync(
+                    origen,
+                    destino);
+
+        await InvokeAsync(StateHasChanged);
+    }
+}

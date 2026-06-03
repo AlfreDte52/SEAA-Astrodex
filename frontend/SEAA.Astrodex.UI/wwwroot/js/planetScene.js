@@ -132,13 +132,66 @@ window.initPlanetScene =
                     128
                 );
 
+            // Ajustar UV para textura tipo strip
+            const pos =
+                ringGeometry.attributes.position;
+
+            const uv =
+                ringGeometry.attributes.uv;
+
+            for (
+                let i = 0;
+                i < pos.count;
+                i++
+            ) {
+                const x =
+                    pos.getX(i);
+
+                const y =
+                    pos.getY(i);
+
+                const r =
+                    Math.sqrt(
+                        x * x +
+                        y * y
+                    );
+
+                // interior→exterior
+                const v =
+                    (r - 2.4) /
+                    (3.2 - 2.4);
+
+                uv.setXY(
+                    i,
+                    0.5,
+                    v
+                );
+            }
+
+            uv.needsUpdate =
+                true;
+
             const ringTexture =
                 textureLoader.load(
                     "/textures/Anillo_Saturno.png"
                 );
 
+            ringTexture.wrapS =
+                THREE.RepeatWrapping;
+
+            ringTexture.wrapT =
+                THREE.ClampToEdgeWrapping;
+
+            ringTexture.center.set(
+                0.5,
+                0.5
+            );
+
+            ringTexture.rotation =
+                Math.PI / 2;
+
             const ringMaterial =
-                new THREE.MeshStandardMaterial({
+                new THREE.MeshBasicMaterial({
 
                     map: ringTexture,
 
@@ -146,7 +199,7 @@ window.initPlanetScene =
 
                     transparent: true,
 
-                    opacity: 0.9
+                    opacity: 1,
                 });
 
             ring =
@@ -155,11 +208,10 @@ window.initPlanetScene =
                     ringMaterial
                 );
 
-            // inclinación
             ring.rotation.x =
                 Math.PI * 0.48;
 
-            ring.rotation.y =
+            ring.rotation.z =
                 0.15;
 
             scene.add(ring);

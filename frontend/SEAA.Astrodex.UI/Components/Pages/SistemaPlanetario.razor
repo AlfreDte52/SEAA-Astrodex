@@ -1,0 +1,48 @@
+﻿@page "/sistema-planetario"
+@rendermode InteractiveServer
+
+@inject IJSRuntime JS
+
+<PageTitle>
+    Sistema Planetario
+</PageTitle>
+
+<div class="explorer-header">
+
+    <h1 class="hero-title">
+        Sistema Planetario
+    </h1>
+
+    <p class="hero-subtitle">
+        Exploración del sistema solar
+    </p>
+
+</div>
+
+<div id="planetary-system"
+     style="
+    width:100%;
+    height:700px;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid #2c355c;">
+</div>
+
+@code {
+
+    private bool escenaCargada;
+
+    protected override async Task
+        OnAfterRenderAsync(
+            bool firstRender)
+    {
+        if (!escenaCargada)
+        {
+            escenaCargada = true;
+
+            await JS.InvokeVoidAsync(
+                "initPlanetarySystem"
+            );
+        }
+    }
+}

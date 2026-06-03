@@ -1,4 +1,145 @@
 ﻿@page "/historial"
+@rendermode InteractiveServer
 
-<h1>📜 Historial</h1>
-<p>Consultas registradas.</p>
+@using SEAA.Astrodex.UI.Models.Historial
+@using SEAA.Astrodex.UI.Services
+
+@inject CuerpoCelesteService CuerpoService
+
+<PageTitle>
+    Historial
+</PageTitle>
+
+<div class="explorer-header">
+
+    <h1 class="hero-title">
+        Historial Astronómico
+    </h1>
+
+    <p class="hero-subtitle">
+        Registro de consultas realizadas
+    </p>
+
+</div>
+
+<div class="history-navigation">
+
+    <button class="space-button"
+            @onclick="PaginaAnterior"
+            disabled="@(paginaActual == 1)">
+
+        ← Anterior
+
+    </button>
+
+    <span>
+        Página @paginaActual
+    </span>
+
+    <button class="space-button"
+            @onclick="PaginaSiguiente">
+
+        Siguiente →
+
+    </button>
+
+</div>
+
+@if (!historial.Any())
+{
+    <p>
+        No hay registros disponibles.
+    </p>
+}
+else
+{
+    <div class="history-panel">
+
+        @foreach (var item in historial)
+        {
+            <div class="history-card">
+
+                <div class="history-type">
+                    @item.tipoConsulta
+                </div>
+
+                <div class="history-body">
+
+                    <div>
+                        <strong>
+                            @item.cuerpoCelesteId
+                        </strong>
+                    </div>
+
+                    <div class="history-date">
+                        @item.fechaConsulta.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
+
+@code {
+
+    private List<HistorialDto>
+    historial = [];
+
+    private int paginaActual = 1;
+
+    private int tamanio = 20;
+
+    private int cantidad = 0;
+
+
+    protected override async Task
+    OnInitializedAsync()
+    {
+        await CargarHistorial();
+    }
+
+
+    private async Task
+    CargarHistorial()
+    {
+        var response =
+            await CuerpoService
+                .ObtenerHistorialAsync(
+                    paginaActual,
+                    tamanio);
+
+        if (response is not null)
+        {
+            historial =
+                response.historial;
+
+            cantidad =
+                response.cantidad;
+        }
+    }
+
+
+    private async Task
+    PaginaAnterior()
+    {
+        if (paginaActual > 1)
+        {
+            paginaActual--;
+
+            await CargarHistorial();
+        }
+    }
+
+    private async Task
+        PaginaSiguiente()
+    {
+        paginaActual++;
+
+        await CargarHistorial();
+    }
+
+
+}
